@@ -63,3 +63,17 @@ insert into actors (name, lastName, contry, birthday) values ("John", "Travolta"
  
  DELETE FROM users
  WHERE name LIKE "m%";
+  
+SELECT * FROM users;
+
+create table rel_movies_users (
+fkmovies int,
+foreign key (fkmovies) REFERENCES Movies (id_movie),
+fkusers int,
+foreign key (fkusers) REFERENCES Users (id_user),
+id_movie_user int primary key auto_increment not null
+);
+
+insert into rel_movies_users (fkusers, fkmovies) values (1,1),(1,2),(2,2);
+SELECT * FROM rel_movies_users; 
+
