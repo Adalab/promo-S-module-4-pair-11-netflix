@@ -1,6 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const mysql = require('mysql2/promise');
+const express = require("express");
+const cors = require("cors");
+const mysql = require("mysql2/promise");
 
 // create and config server
 const server = express();
@@ -13,22 +13,22 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
-// 
+//
 mysql
   .createConnection({
-    host: 'localhost',
-    database: 'empleados',
-    user: 'root',
-    password: 'tuPassword',
+    host: "localhost",
+    database: "empleados",
+    user: "root",
+    password: "tuPassword",
   })
-  .then(connection => {
+  .then((connection) => {
     connection
       .connect()
       .catch((err) => {
-        console.error('Error de conexion: ' + err.stack);
+        console.error("Error de conexion: " + err.stack);
       })
       .then(() => {
-        return connection.query('SELECT * FROM empleados');
+        return connection.query("SELECT * FROM empleados");
       })
       .then(([results, fields]) => {
         results.forEach((result) => {
@@ -36,9 +36,9 @@ mysql
         });
       })
       .catch((err) => {
-        console.error('Error en la query: ' + err.stack);
+        console.error("Error en la query: " + err.stack);
       });
   })
   .catch((err) => {
-    console.error('Error de configuración: ' + err.stack);
+    console.error("Error de configuración: " + err.stack);
   });
