@@ -74,6 +74,16 @@ foreign key (fkusers) REFERENCES Users (id_user),
 id_movie_user int primary key auto_increment not null
 );
 
-insert into rel_movies_users (fkusers, fkmovies) values (1,1),(1,2),(2,2);
+insert into rel_movies_users (fkusers, fkmovies) values (1,1),(1,2),(3,2);
 SELECT * FROM rel_movies_users; 
 
+create table rel_movies_actors (
+fkmovies int,
+fkactors int,
+foreign key (fkmovies) REFERENCES Movies (id_movie),
+foreign key (fkactors) REFERENCES Actors (id_actor),
+id_movies_actors int primary key auto_increment not null
+);
+ 
+insert into rel_movies_actors (fkmovies, fkactors) values (1,1), (2,2), (3,3);
+SELECT * FROM rel_movies_actors;
