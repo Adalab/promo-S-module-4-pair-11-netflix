@@ -14,21 +14,23 @@ server.listen(serverPort, () => {
 });
 
 //
+let connection; //hay que definir la variable
 mysql
   .createConnection({
     host: "localhost",
-    database: "empleados",
+    database: "Netflix",
     user: "root",
-    password: "tuPassword",
+    password: "SQLlula00!",
   })
-  .then((connection) => {
+  .then((conn) => {
+    connection = conn;
     connection
       .connect()
       .catch((err) => {
         console.error("Error de conexion: " + err.stack);
       })
       .then(() => {
-        return connection.query("SELECT * FROM empleados");
+        return connection.query("SELECT * FROM movies");
       })
       .then(([results, fields]) => {
         results.forEach((result) => {
@@ -42,3 +44,21 @@ mysql
   .catch((err) => {
     console.error("Error de configuración: " + err.stack);
   });
+
+  //Ahora, tenemos que incorporar el código para lanzar la sentencia select dentro de una función de un endpoint. Añade al final del fichero index.js.
+  server.get("/movies", (req, res)=>{
+    console.log ("Pidiendo base de datos");
+    connection
+    .query("SELECT * FROM movies")
+      .then(([results, fields])=>{
+    res.json({
+      succes: true,
+      movies: results,
+      //variable result tiene que estar dentro de .then
+    });
+    });
+
+
+
+
+  })
