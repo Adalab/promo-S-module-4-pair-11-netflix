@@ -17,10 +17,10 @@ server.listen(serverPort, () => {
 let connection; //hay que definir la variable
 mysql
   .createConnection({
-    host: "localhost",
-    database: "Netflix",
+    host: "127.0.0.1",
+    database: "netflix",
     user: "root",
-    password: "SQLlula00!",
+    password: "Topocerdo@85",
   })
   .then((conn) => {
     connection = conn;
@@ -34,7 +34,7 @@ mysql
       })
       .then(([results, fields]) => {
         results.forEach((result) => {
-          console.log(result);
+          //console.log(result);
         });
       })
       .catch((err) => {
@@ -47,8 +47,23 @@ mysql
 
   //Ahora, tenemos que incorporar el código para lanzar la sentencia select dentro de una función de un endpoint. Añade al final del fichero index.js.
   server.get("/movies", (req, res)=>{
-    console.log ("Pidiendo base de datos");
-    connection
+   // console.log("Pidiendo base de datos");
+    const genreFilterParam = req.query.gender;
+    const sortFilterParam = req.query.sort;
+    console.log(genreFilterParam);
+    
+    if (genreFilterParam !== "") {
+      connection 
+        .query("SELECT * FROM movies WHERE gender = ?", [genreFilterParam])
+        .then(([results, fields]) => {
+          res.json({
+            succes: true,
+            movies: results,
+            //variable result tiene que estar dentro de .then
+          });
+        });
+    } else  {
+      connection 
     .query("SELECT * FROM movies")
       .then(([results, fields])=>{
     res.json({
@@ -57,8 +72,5 @@ mysql
       //variable result tiene que estar dentro de .then
     });
     });
-
-
-
-
+    }
   })
