@@ -50,11 +50,11 @@ mysql
    // console.log("Pidiendo base de datos");
     const genreFilterParam = req.query.gender;
     const sortFilterParam = req.query.sort;
-    console.log(genreFilterParam);
+    console.log(sortFilterParam);
     
     if (genreFilterParam !== "") {
       connection 
-        .query("SELECT * FROM movies WHERE gender = ?", [genreFilterParam])
+        .query(`SELECT * FROM movies WHERE gender = ? ORDER BY title ${sortFilterParam}`, [genreFilterParam] )
         .then(([results, fields]) => {
           res.json({
             succes: true,
@@ -64,7 +64,7 @@ mysql
         });
     } else  {
       connection 
-    .query("SELECT * FROM movies")
+    .query(`SELECT * FROM movies ORDER BY title ${sortFilterParam}`)
       .then(([results, fields])=>{
     res.json({
       succes: true,
