@@ -17,10 +17,10 @@ server.listen(serverPort, () => {
 let connection; //hay que definir la variable
 mysql
   .createConnection({
-    host: "127.0.0.1",
+    host: "localhost",
     database: "netflix",
     user: "root",
-    password: "Topocerdo@85",
+    password: "SQLlula00!",
   })
   .then((conn) => {
     connection = conn;
@@ -73,4 +73,31 @@ mysql
     });
     });
     }
+  })
+
+  //endpoint para el login
+  server.post("/login", (req, res)=>{
+    console.log (req.body);
+    const mailInput = req.body.email;
+    const passwordInput = req.body.password;
+
+    connection
+    .query(`SELECT * FROM users WHERE email= ? and pasword =?`, [mailInput,passwordInput ])
+    .then(([results, fields]) => {
+      
+      if(results.length>0){
+              
+      res.json({
+      succes: true,
+      userId: results[0].id_user, //nos devuelve el id de la usaria
+      });
+    }else{
+      
+      res.json({
+      success: false,
+    "errorMessage": "Usuaria/o no encontrada/o"
+      });
+    } 
+   
+  });
   })
