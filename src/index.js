@@ -6,6 +6,8 @@ const mysql = require("mysql2/promise");
 const server = express();
 server.use(cors());
 server.use(express.json());
+server.set('view engine', 'ejs');
+
 
 // init express aplication
 const serverPort = 4000;
@@ -17,10 +19,10 @@ server.listen(serverPort, () => {
 let connection; //hay que definir la variable
 mysql
   .createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     database: "netflix",
     user: "root",
-    password: "SQLlula00!",
+    password: "Topocerdo@85",
   })
   .then((conn) => {
     connection = conn;
@@ -76,28 +78,47 @@ mysql
   })
 
   //endpoint para el login
-  server.post("/login", (req, res)=>{
-    console.log (req.body);
-    const mailInput = req.body.email;
-    const passwordInput = req.body.password;
+server.post("/login", (req, res) => {
+  console.log(req.body);
+  const mailInput = req.body.email;
+  const passwordInput = req.body.password;
 
-    connection
-    .query(`SELECT * FROM users WHERE email= ? and pasword =?`, [mailInput,passwordInput ])
+  connection
+    .query(`SELECT * FROM users WHERE email= ? and pasword =?`, [mailInput, passwordInput])
     .then(([results, fields]) => {
       
-      if(results.length>0){
+      if (results.length > 0) {
               
-      res.json({
-      succes: true,
-      userId: results[0].id_user, //nos devuelve el id de la usaria
-      });
-    }else{
+        res.json({
+          succes: true,
+          userId: results[0].id_user, //nos devuelve el id de la usaria
+        });
+      } else {
       
-      res.json({
-      success: false,
-    "errorMessage": "Usuaria/o no encontrada/o"
-      });
-    } 
+        res.json({
+          success: false,
+          "errorMessage": "Usuaria/o no encontrada/o"
+        });
+      }
    
-  });
+    });
+});
+
+//endpoint motor de plantillas
+server.get('/movie/:movieId', (req, res) => {
+  const movieIdParams = req.params.movieId;
+  console.log(movieIdParams);
+  const foundMovie= "SELECT * FROM movies WHERE id_movie = ?"
+  connection
+  .query(foundMovie, [movieIdParams])
+    .then(([results, fields]) => {
+      res.render("movie", results[0]);
   })
+})
+
+//Servidor estático
+const staticServerPathImages = "./src/public-movies-images";
+server.use(express.static(staticServerPathImages));
+
+const staticServerPathWeb = "./src/public-react";
+server.use(express.static(staticServerPathWeb));
