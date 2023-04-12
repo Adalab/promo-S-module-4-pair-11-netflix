@@ -117,6 +117,9 @@ server.get('/movie/:movieId', (req, res) => {
 })
 
 //Servidor estático
+const staticServerPathStyles = "./src/public-css";
+server.use(express.static(staticServerPathStyles));
+
 const staticServerPathImages = "./src/public-movies-images";
 server.use(express.static(staticServerPathImages));
 
